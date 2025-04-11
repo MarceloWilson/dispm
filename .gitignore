@@ -1,0 +1,33 @@
+# Ignorar arquivos de log
+*.log
+
+# Ignorar pastas do Node.js
+node_modules/
+
+# Ignorar builds
+dist/
+build/
+
+# Ignorar arquivos de configuração do sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar arquivos do VSCode
+.vscode/
+*.code-workspace
+
+# node_modules e logs
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Editor config
+.vscode/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos de ambiente
+.env
