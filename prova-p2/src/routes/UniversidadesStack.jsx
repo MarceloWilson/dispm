@@ -26,7 +26,7 @@ export default function UniversidadesStack() {
         options={{ title: "Cadastro de Universidade" }} 
       />
       <Stack.Screen 
-        name="UniversidadesDetalhe" 
+        name="UniversidadesDetalhes" 
         component={UniversidadesDetalhe} 
         options={{ title: "Detalhes da Universidade" }} 
       />
