@@ -3,7 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import GastronomiaStack from "./GastronomiaStack";
 import TradicoesStack from "./TradicoesStack";
-import UniversidadesStack from "./UniversidadesStack";
+import ReceitasStack from "./ReceitasStack";
 
 const Drawer = createDrawerNavigator();
 
@@ -52,10 +52,10 @@ export default function DrawerRoutes() {
       />
 
       <Drawer.Screen
-        name="UniversidadesStack"
-        component={UniversidadesStack}
+        name="ReceitasStack"
+        component={ReceitasStack}
         options={{
-          title: "Universidades",
+          title: "Receitas",
           drawerIcon: ({ color, size }) => (
             <Ionicons name="school" color={color} size={size} />
           ),

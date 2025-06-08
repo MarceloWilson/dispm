@@ -58,11 +58,13 @@ export default function HomeScreen() {
             title={cultura.titulo}
             titleNumberOfLines={2}
             titleStyle={[styles.cardTitle, { color: colors.primary }]}
+            contentStyle={{ marginLeft: 12 }} // afastar o texto do avatar
+            style={{ paddingVertical: 10 }}   // espaço vertical entre imagem e título
             left={(props) => (
               <Avatar.Image
                 {...props}
                 source={{ uri: cultura.imagem }}
-                size={70}
+                size={52}
                 style={styles.avatar}
               />
             )}
@@ -88,7 +90,6 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     padding: 20,
     borderRadius: 20,
-    // sombra suave para a intro
     shadowColor: '#6200ee',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.15,
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#6200ee',
     marginRight: 0,
-    marginTop: 10,
+    marginTop: 4,
   },
   cardTitle: {
     fontSize: 20,

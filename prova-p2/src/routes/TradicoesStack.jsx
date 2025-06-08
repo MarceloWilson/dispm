@@ -2,7 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TradicoesLista from '../screens/Tradicoes/TradicoesLista';
 import TradicoesCadastro from '../screens/Tradicoes/TradicoesCadastro';
-import TradicoesDetalhe from '../screens/Tradicoes/TradicoesDetalhes';
+import TradicoesDetalhes from '../screens/Tradicoes/TradicoesDetalhes';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,8 +26,8 @@ export default function TradicoesStack() {
         options={{ title: "Cadastro de Tradição" }} 
       />
       <Stack.Screen 
-        name="TradicoesDetalhe" 
-        component={TradicoesDetalhe} 
+        name="TradicoesDetalhes" 
+        component={TradicoesDetalhes} 
         options={{ title: "Detalhes da Tradição" }} 
       />
     </Stack.Navigator>

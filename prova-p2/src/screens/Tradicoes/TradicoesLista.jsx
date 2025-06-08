@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, View } from 'react-native';
-import { Card, Button, Text } from 'react-native-paper';
+import { View, StyleSheet, FlatList, Alert } from 'react-native';
+import { Card, Button, Text, FAB, useTheme } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const TradicoesLista = ({ navigation }) => {
   const [tradicoes, setTradicoes] = useState([]);
+  const { colors } = useTheme();
 
   const carregar = async () => {
     const data = await AsyncStorage.getItem('tradicoes');
@@ -16,35 +17,109 @@ const TradicoesLista = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
-  const excluir = async (index) => {
-    const novaLista = [...tradicoes];
-    novaLista.splice(index, 1);
-    await AsyncStorage.setItem('tradicoes', JSON.stringify(novaLista));
-    carregar();
+  const confirmarExclusao = (index) => {
+    Alert.alert('Confirmar', 'Deseja excluir esta tradição?', [
+      { text: 'Cancelar' },
+      {
+        text: 'Excluir',
+        onPress: async () => {
+          const novaLista = tradicoes.filter((_, i) => i !== index);
+          await AsyncStorage.setItem('tradicoes', JSON.stringify(novaLista));
+          carregar();
+        },
+      },
+    ]);
   };
 
+  const renderItem = ({ item, index }) => (
+    <Card style={styles.card} key={index}>
+      <Card.Title title={item.nome} subtitle={item.pais} />
+      <Card.Content>
+        <Text>{item.descricao}</Text>
+      </Card.Content>
+      <Card.Actions>
+        <Button
+          mode="text"
+          onPress={() => navigation.navigate('TradicoesDetalhes', { tradicao: item })}
+          textColor={colors.primary}
+        >
+          Ver Detalhes
+        </Button>
+        <Button
+          mode="outlined"
+          onPress={() => navigation.navigate('TradicoesCadastro', { tradicao: item, index })}
+          style={styles.editButton}
+        >
+          Editar
+        </Button>
+        <Button
+          mode="text"
+          onPress={() => confirmarExclusao(index)}
+          textColor={colors.error}
+        >
+          Excluir
+        </Button>
+      </Card.Actions>
+    </Card>
+  );
+
   return (
-    <View style={{ flex: 1, padding: 10 }}>
-      <Button mode="contained" onPress={() => navigation.navigate('TradicoesCadastro')}>Nova Tradição</Button>
-      <FlatList
-        data={tradicoes}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => (
-          <Card style={{ marginVertical: 5 }}>
-            <Card.Title title={item.nome} subtitle={item.pais} />
-            <Card.Content>
-              <Text>{item.descricao}</Text>
-            </Card.Content>
-            <Card.Actions>
-              <Button onPress={() => navigation.navigate('TradicoesDetalhes', { tradicao: item })}>Ver Detalhes</Button>
-              <Button onPress={() => navigation.navigate('TradicoesCadastro', { tradicao: item, index })}>Editar</Button>
-              <Button onPress={() => excluir(index)}>Excluir</Button>
-            </Card.Actions>
-          </Card>
-        )}
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      {tradicoes.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text variant="titleMedium" style={styles.emptyText}>
+            Nenhuma tradição cadastrada ainda
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={tradicoes}
+          renderItem={renderItem}
+          keyExtractor={(_, i) => i.toString()}
+          contentContainerStyle={{ paddingBottom: 100, paddingTop: 16 }}
+        />
+      )}
+
+      <FAB
+        icon="plus"
+        label="Nova Tradição"
+        color={colors.onPrimary}
+        style={[styles.fab, { backgroundColor: colors.primary }]}
+        onPress={() => navigation.navigate('TradicoesCadastro')}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  card: {
+    marginHorizontal: 16,
+    marginVertical: 8,
+    borderRadius: 8,
+    elevation: 3,
+    backgroundColor: 'white',
+  },
+  editButton: {
+    marginLeft: 8,
+    borderWidth: 1,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  emptyText: {
+    color: '#666',
+    textAlign: 'center',
+  },
+  fab: {
+    position: 'absolute',
+    right: 16,
+    bottom: 24,
+    borderRadius: 50,
+  },
+});
 
 export default TradicoesLista;

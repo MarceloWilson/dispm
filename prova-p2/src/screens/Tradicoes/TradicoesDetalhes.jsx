@@ -1,30 +1,44 @@
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { Card, Text, Button } from 'react-native-paper';
 
 const TradicoesDetalhes = ({ route, navigation }) => {
   const { tradicao } = route.params;
 
+  console.log('Tradicao recebida no detalhe:', tradicao);
+
   return (
-    <ScrollView style={{ padding: 10 }}>
-      <Card>
+    <ScrollView style={styles.container}>
+      <Card style={styles.card}>
         <Card.Title title={tradicao.nome} subtitle={tradicao.pais} />
         <Card.Content>
-          <Text variant="titleMedium">Descrição:</Text>
-          <Text>{tradicao.descricao}</Text>
+          <Text variant="titleMedium" style={styles.title}>Descrição:</Text>
+          <Text style={styles.text}>{tradicao.descricao}</Text>
 
-          <Text variant="titleMedium" style={{ marginTop: 10 }}>Data:</Text>
-          <Text>{tradicao.data}</Text>
+          <Text variant="titleMedium" style={styles.title}>Data da Tradição:</Text>
+          <Text style={styles.text}>{tradicao.data}</Text>
 
-          <Text variant="titleMedium" style={{ marginTop: 10 }}>Vestimenta Típica:</Text>
-          <Text>{tradicao.vestimenta}</Text>
+          {/* Se precisar mostrar mais campos, coloque aqui */}
         </Card.Content>
       </Card>
 
-      <Button mode="outlined" style={{ marginTop: 20 }} onPress={() => navigation.goBack()}>Voltar</Button>
+      <Button
+        mode="outlined"
+        onPress={() => navigation.goBack()}
+        style={styles.button}
+      >
+        Voltar
+      </Button>
     </ScrollView>
   );
 };
 
-export default TradicoesDetalhes;
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, backgroundColor: '#fff' },
+  card: { marginBottom: 20 },
+  title: { marginTop: 12, marginBottom: 4, fontWeight: 'bold' },
+  text: { fontSize: 14, color: '#333' },
+  button: { marginTop: 10 }
+});
 
+export default TradicoesDetalhes;

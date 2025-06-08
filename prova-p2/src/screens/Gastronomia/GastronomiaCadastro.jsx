@@ -4,188 +4,122 @@ import {
   View,
   ScrollView,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Alert
 } from 'react-native';
 import {
   TextInput,
   Button,
   useTheme,
-  Avatar,
-  Text
+  Avatar
 } from 'react-native-paper';
 import { TextInputMask } from 'react-native-masked-text';
 import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function GastronomiaCadastro({ navigation, route }) {
   const { colors } = useTheme();
-
   const [nome, setNome] = useState('');
-  const [ingredientes, setIngredientes] = useState('');
-  const [modoPreparo, setModoPreparo] = useState('');
-  const [dataReceita, setDataReceita] = useState('');
+  const [local, setLocal] = useState('');
+  const [dataCriacao, setDataCriacao] = useState('');
   const [foto, setFoto] = useState(null);
-
   const index = route.params?.index;
 
   useEffect(() => {
-    if (route.params?.receita) {
-      const receita = route.params.receita;
-      setNome(receita.nome || '');
-      setIngredientes(receita.ingredientes || '');
-      setModoPreparo(receita.modoPreparo || '');
-      setDataReceita(receita.dataReceita || '');
-      setFoto(receita.foto || null);
+    const r = route.params?.receita;
+    if (r) {
+      setNome(r.nome || '');
+      setLocal(r.local || '');
+      setDataCriacao(r.dataCriacao || '');
+      setFoto(r.foto || null);
     }
   }, [route.params]);
 
   const salvar = async () => {
-    const novaReceita = {
-      nome,
-      ingredientes,
-      modoPreparo,
-      dataReceita,
-      foto
-    };
-
+    const nova = { nome, local, dataCriacao, foto };
     try {
-      const storage = await AsyncStorage.getItem('receitas');
-      const lista = storage ? JSON.parse(storage) : [];
-
-      if (index !== undefined) {
-        lista[index] = novaReceita;
-      } else {
-        lista.push(novaReceita);
-      }
-
+      const dados = await AsyncStorage.getItem('receitas');
+      const lista = dados ? JSON.parse(dados) : [];
+      if (index !== undefined) lista[index] = nova;
+      else lista.push(nova);
       await AsyncStorage.setItem('receitas', JSON.stringify(lista));
       navigation.goBack();
-    } catch (e) {
-      alert('Erro ao salvar a receita');
+    } catch {
+      Alert.alert('Erro', 'Não foi possível salvar.');
     }
   };
 
   const escolherFoto = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      alert('Permissão negada para acessar a galeria!');
+      Alert.alert('Permissão negada', 'Acesso à galeria é necessário.');
       return;
     }
-
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaType,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1
     });
-
-    if (!result.canceled) {
-      setFoto(result.assets[0].uri);
-    }
+    if (!result.canceled) setFoto(result.assets[0].uri);
   };
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={styles.flex}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={80}
     >
       <ScrollView
         style={[styles.container, { backgroundColor: colors.background }]}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={styles.contentContainer}
         keyboardShouldPersistTaps="handled"
       >
-        <View style={styles.formContainer}>
+        <View style={styles.form}>
           {foto ? (
-            <Avatar.Image
-              size={150}
-              source={{ uri: foto }}
-              style={styles.fotoPreview}
-            />
+            <Avatar.Image size={120} source={{ uri: foto }} style={styles.avatar} />
           ) : (
-            <Avatar.Icon
-              size={150}
-              icon="camera"
-              style={[
-                styles.fotoPlaceholder,
-                { backgroundColor: colors.surfaceVariant }
-              ]}
-            />
+            <Avatar.Icon size={120} icon="camera" style={styles.avatar} />
           )}
 
-          <Button
-            mode="contained-tonal"
-            icon="camera"
-            onPress={escolherFoto}
-            style={styles.fotoButton}
-            labelStyle={styles.buttonLabel}
-          >
-            {foto ? 'Alterar Foto do Prato' : 'Adicionar Foto do Prato'}
+          <Button mode="outlined" icon="image" onPress={escolherFoto} style={styles.button}>
+            {foto ? 'Alterar Foto' : 'Adicionar Foto'}
           </Button>
 
           <TextInput
-            style={styles.input}
+            label="Nome do Prato"
             mode="outlined"
-            label="Nome da Receita"
-            placeholder="Digite o nome da receita"
             value={nome}
             onChangeText={setNome}
+            style={styles.input}
           />
 
           <TextInput
-            style={styles.input}
+            label="Local da Gastronomia"
             mode="outlined"
-            label="Ingredientes"
-            placeholder="Liste os ingredientes (separados por vírgula)"
-            multiline
-            numberOfLines={3}
-            value={ingredientes}
-            onChangeText={setIngredientes}
+            value={local}
+            onChangeText={setLocal}
+            style={styles.input}
           />
 
           <TextInput
-            style={styles.input}
+            label="Data de Criação"
             mode="outlined"
-            label="Modo de Preparo"
-            placeholder="Descreva o passo a passo"
-            multiline
-            numberOfLines={4}
-            value={modoPreparo}
-            onChangeText={setModoPreparo}
-          />
-
-          <TextInput
-            style={styles.input}
-            mode="outlined"
-            label="Data da Receita"
             placeholder="DD/MM/AAAA"
-            value={dataReceita}
-            onChangeText={setDataReceita}
+            value={dataCriacao}
+            onChangeText={setDataCriacao}
             keyboardType="numeric"
+            style={styles.input}
             render={(props) => (
-              <TextInputMask
-                {...props}
-                type={'datetime'}
-                options={{ format: 'DD/MM/YYYY' }}
-              />
+              <TextInputMask {...props} type="datetime" options={{ format: 'DD/MM/YYYY' }} />
             )}
           />
 
-          <Button
-            mode="contained"
-            onPress={salvar}
-            style={[styles.saveButton, { backgroundColor: colors.primary }]}
-            labelStyle={styles.buttonLabel}
-            icon="content-save"
-          >
-            Salvar Receita
+          <Button mode="contained" icon="content-save" onPress={salvar} style={styles.button}>
+            Salvar
           </Button>
 
-          <Button
-            mode="text"
-            onPress={() => navigation.goBack()}
-            style={{ marginTop: 8 }}
-            icon="arrow-left"
-          >
+          <Button mode="text" icon="arrow-left" onPress={() => navigation.goBack()}>
             Voltar
           </Button>
         </View>
@@ -194,43 +128,12 @@ export default function GastronomiaCadastro({ navigation, route }) {
   );
 }
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16
-  },
-  scrollContent: {
-    flexGrow: 1,
-    paddingBottom: 300
-  },
-  formContainer: {
-    alignItems: 'center',
-    paddingBottom: 30
-  },
-  input: {
-    width: '100%',
-    marginBottom: 16
-  },
-  fotoPreview: {
-    marginBottom: 16,
-    backgroundColor: 'transparent'
-  },
-  fotoPlaceholder: {
-    marginBottom: 16
-  },
-  fotoButton: {
-    width: '100%',
-    marginBottom: 24
-  },
-  saveButton: {
-    width: '100%',
-    marginTop: 16,
-    paddingVertical: 8
-  },
-  buttonLabel: {
-    fontSize: 16,
-    paddingVertical: 6
-  }
+  flex: { flex: 1 },
+  container: { flex: 1, padding: 16 },
+  contentContainer: { flexGrow: 1, paddingBottom: 30 },
+  form: { alignItems: 'center' },
+  avatar: { marginBottom: 16, backgroundColor: '#ddd' },
+  input: { width: '100%', marginBottom: 16 },
+  button: { width: '100%', marginVertical: 6 }
 });
