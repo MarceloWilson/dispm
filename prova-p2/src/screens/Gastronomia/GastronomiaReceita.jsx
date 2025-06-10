@@ -11,11 +11,11 @@ const GastronomiaReceita = ({ route, navigation }) => {
         <Card.Title title={receita.nome} subtitle={receita.pais} />
         {receita.foto && <Card.Cover source={{ uri: receita.foto }} />}
         <Card.Content>
-          <Text variant="titleMedium" style={styles.sectionTitle}>Ingredientes:</Text>
-          <Text style={styles.text}>{receita.ingredientes}</Text>
+          <Text variant="titleMedium" style={styles.sectionTitle}>Data da criação:</Text>
+          <Text style={styles.text}>{receita.dataCriacao}</Text>
 
-          <Text variant="titleMedium" style={[styles.sectionTitle, { marginTop: 12 }]}>Modo de Preparo:</Text>
-          <Text style={styles.text}>{receita.preparo}</Text>
+          <Text variant="titleMedium" style={[styles.sectionTitle, { marginTop: 12 }]}>Local de Criação:</Text>
+          <Text style={styles.text}>{receita.local}</Text>
         </Card.Content>
       </Card>
 

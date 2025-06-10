@@ -12,13 +12,12 @@ const TradicoesDetalhes = ({ route, navigation }) => {
       <Card style={styles.card}>
         <Card.Title title={tradicao.nome} subtitle={tradicao.pais} />
         <Card.Content>
-          <Text variant="titleMedium" style={styles.title}>Descrição:</Text>
-          <Text style={styles.text}>{tradicao.descricao}</Text>
-
           <Text variant="titleMedium" style={styles.title}>Data da Tradição:</Text>
-          <Text style={styles.text}>{tradicao.data}</Text>
+          <Text style={styles.text}>{tradicao.dataTradicao}</Text>
 
-          {/* Se precisar mostrar mais campos, coloque aqui */}
+          <Text variant="titleMedium" style={styles.title}>Local da tradição:</Text>
+          <Text style={styles.text}>{tradicao.local}</Text>
+
         </Card.Content>
       </Card>
 

@@ -56,7 +56,7 @@ export default function GastronomiaCadastro({ navigation, route }) {
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1
