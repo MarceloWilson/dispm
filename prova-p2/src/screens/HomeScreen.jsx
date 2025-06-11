@@ -10,7 +10,7 @@ export default function HomeScreen() {
       titulo: 'Arquitetura Chinesa',
       descricao:
         'A arquitetura tradicional chinesa é uma das mais antigas e contínuas do mundo, caracterizada por sua elegância, complexidade e profunda conexão com a filosofia. Edifícios como templos, palácios e jardins são construídos com madeira predominantemente, telhados curvos e ornamentados que se estendem para o céu, simbolizando a ligação entre o céu e a terra. A simetria, o uso de cores vibrantes como o vermelho e o dourado, e a integração com a paisagem natural são pilares que refletem a busca pela harmonia e o equilíbrio cósmico na cultura chinesa. É um legado que fascina pela sua durabilidade e beleza intrínseca.',
-      imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7TMVozKEqVaPenu9GHRC_0GhQoasawBGwBA&s',
+      imagem: 'https://blog.archtrends.com/wp-content/uploads/2021/02/Arquitetura-chinesa.jpg',
     },
     {
       titulo: 'Culinária Brasileira',
@@ -29,7 +29,7 @@ export default function HomeScreen() {
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={[styles.introContainer, { backgroundColor: colors.surface }]}>
-        <Text variant="headlineMedium" style={[styles.introTitle, { color: colors.primary }]}>
+        <Text variant="headlineMedium" style={[styles.introTitle, { color: '#0A4A0A' }]}>
           Um Mundo de Cores e Tradições
         </Text>
         <Text variant="bodyLarge" style={[styles.introText, { color: colors.onSurface }]}>
@@ -57,15 +57,15 @@ export default function HomeScreen() {
           <Card.Title
             title={cultura.titulo}
             titleNumberOfLines={2}
-            titleStyle={[styles.cardTitle, { color: colors.primary }]}
-            contentStyle={{ marginLeft: 12 }} // afastar o texto do avatar
-            style={{ paddingVertical: 10 }}   // espaço vertical entre imagem e título
+            titleStyle={[styles.cardTitle, { color: '#0A4A0A' }]}
+            contentStyle={{ marginLeft: 12 }}
+            style={{ paddingVertical: 10 }}
             left={(props) => (
               <Avatar.Image
                 {...props}
                 source={{ uri: cultura.imagem }}
                 size={52}
-                style={styles.avatar}
+                style={[styles.avatar, { borderColor: '#5C4033' }]}
               />
             )}
           />
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     marginBottom: 32,
     padding: 20,
     borderRadius: 20,
-    shadowColor: '#6200ee',
+    shadowColor: '#764937',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.15,
     shadowRadius: 12,
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   avatar: {
     backgroundColor: '#fff',
     borderWidth: 2,
-    borderColor: '#6200ee',
+    borderColor: '#5C4033', // Cor da borda alterada para marrom escuro
     marginRight: 0,
     marginTop: 4,
   },

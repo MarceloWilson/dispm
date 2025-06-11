@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList, Alert } from 'react-native';
+import { View, StyleSheet, FlatList, Alert, Image } from 'react-native';
 import { Card, Button, Text, FAB, useTheme } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -33,6 +33,9 @@ const TradicoesLista = ({ navigation }) => {
 
   const renderItem = ({ item, index }) => (
     <Card style={styles.card} key={index}>
+      {item.foto ? (
+        <Card.Cover source={{ uri: item.foto }} style={styles.cardCover} />
+      ) : null}
       <Card.Title title={item.nome} subtitle={item.pais} />
       <Card.Content>
         <Text>{item.descricao}</Text>
@@ -93,12 +96,22 @@ const TradicoesLista = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  image:{
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    borderWidth: 2,
+    borderColor: '#ddd',
+  },
   card: {
     marginHorizontal: 16,
     marginVertical: 8,
     borderRadius: 8,
     elevation: 3,
     backgroundColor: 'white',
+  },
+  cardCover: {
+    height: 150,
   },
   editButton: {
     marginLeft: 8,

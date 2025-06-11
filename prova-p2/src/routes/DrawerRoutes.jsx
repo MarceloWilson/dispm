@@ -13,7 +13,7 @@ export default function DrawerRoutes() {
       screenOptions={{
         headerTitleAlign: "center",
         headerTintColor: "#fff",
-        headerStyle: { backgroundColor: "#3f51b5" }, // Azul material
+        headerStyle: { backgroundColor: "#764937" },
         drawerActiveTintColor: "#3f51b5",
         drawerInactiveTintColor: "#333",
       }}
